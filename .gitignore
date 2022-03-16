@@ -135,3 +135,5 @@ dist
 # Custom
 token.json
 examples/
+venv/
+py-query.py
