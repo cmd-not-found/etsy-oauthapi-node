@@ -6,7 +6,7 @@ This is an example `node` implementation of Etsy's new v3 Oauth API. The code he
 
 ## Requirements
 1. An Etsy approved app. Request one [here](https://www.etsy.com/developers/register).
-2. After approved (could take several days), update your redirect URI on the Etsy manage my apps page [here](https://www.etsy.com/developers/your-apps). If you don't know what to put, input `http://localhost:3003`. That's what we use in this example.
+2. After approved (could take several days), update your redirect URI on the Etsy manage my apps page [here](https://www.etsy.com/developers/your-apps). If you don't know what to put, input `http://localhost:3003`. That's what we use in this example project.
 
 > **NOTE:** `v3` of Etsy's API is new and all new apps (as of early 2022) must use this version. See timeline [here](https://developers.etsy.com/documentation/migration/index/#launch-stages).
 
@@ -27,6 +27,22 @@ In your `etsyapp/` directory, add a `.env` file with contents similar to below e
 ```
 # API
 API_TOKEN=1aa2bb33c44d55eeeeee6fff
+```
+
+Your directory structure should look like this:
+
+```
+./etsy-oauthapi-node
+├── README.md
+├── .gitignore
+└── etsyapp
+    ├── .env
+    ├── package-lock.json
+    ├── package.json
+    ├── server.js
+    ├── node_modules/...
+    └── views
+        └── index.hbs
 ```
 
 ## Auth Flow
@@ -56,14 +72,45 @@ If everything went well, you'll see in your web browser JSON that looks like thi
 }
 ```
 
-You can now use this access token to make subsequent API calls to the various endpoints that are applicable for the scope that was requested in the authentication flow. By default, this example app requests the following scopes: `email_r`, `shops_r`, `profile_r`, and `transactions_r`. The scopes are defined in `server.js` with the following statement:
+You can now use this access token to make subsequent API calls to the Etsy API. You'll need to specify two header values to make a successful call.
 
-```js
+```json
+{
+    "x-api-key": "{api_keystring}",
+    "Authorization" : "Bearer {access_token}"
+}
+```
+
+Note that the `access_token` is only valid for 3600 seconds (1 hour). Any API calls after that time will return a `401` status code and the below JSON response.
+
+```json
+{
+    "error": "invalid_token",
+    "error_description": "access token is expired"
+}
+```
+
+If you didn't provision your authentication code with the correct scope for the API endpoint being requested, you'll get a JSON response like below. You'll need to complete the authorization code grant flow again to request the correct scope.
+
+```json
+{
+    "error": "insufficient_scope",
+    "error_description": "Insufficient scope"
+}
+```
+
+By default, this example app requests the following scopes: `email_r`, `shops_r`, `profile_r`, and `transactions_r`. The scopes are defined in `server.js` with the following statement:
+
+```javascript
 const contexts = 'email_r%20shops_r%20profile_r%20transactions_r'
 ```
 
 For more informatin on scopes, read [here](https://developers.etsy.com/documentation/essentials/authentication#scopes). 
 
+I used this project to obtain the initial Access & Refresh tokens so that I could migrate them to a Python Lambda function - that project code is [here](https://github.com/cmd-not-found/etsy-polling-lambda).
+
 ## References
+
+Quick intro on Node.js Handlebars templating engine.
 
 > **REF:** <https://medium.com/programming-sage/handlebars-in-node-js-tutorial-a30a41fc6206>
