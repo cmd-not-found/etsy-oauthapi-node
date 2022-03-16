@@ -38,7 +38,6 @@ const codeChallenge = base64URLEncode(sha256(codeVerifier));
 const state = Math.random().toString(36).substring(7);
 
 const buildMyUrl = `https://www.etsy.com/oauth/connect?response_type=code&redirect_uri=${baseurl}/oauth/redirect&scope=${contexts}&client_id=${apitoken}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`
-console.log(`Build URL: ${buildMyUrl}`);
 
 // Send a JSON response to a default get request
 app.get('/ping', async (req, res) => {
@@ -109,5 +108,5 @@ app.get("/oauth/redirect", async (req, res) => {
 
 // Start the server on port 3003
 app.listen(port, () => {
-    console.log(`Example app listening at ${baseurl}`);
+    console.log(`Etsy Example app now listening at... ${baseurl}`);
 });
