@@ -7,6 +7,7 @@ This is an example `node` implementation of Etsy's new v3 Oauth API. The code he
 ## Requirements
 1. An Etsy approved app. Request one [here](https://www.etsy.com/developers/register).
 2. After approved (could take several days), update your redirect URI on the Etsy manage my apps page [here](https://www.etsy.com/developers/your-apps). If you don't know what to put, input `http://localhost:3003`. That's what we use in this example project.
+3. On the _Manage your apps_ section (link from step 2), click _SEE API KEY DETAILS_ and copy your **KEYSTRING** for use in the next step.
 
 > **NOTE:** `v3` of Etsy's API is new and all new apps (as of early 2022) must use this version. See timeline [here](https://developers.etsy.com/documentation/migration/index/#launch-stages).
 
@@ -22,7 +23,7 @@ $ npm install
 
 > **REF:** <https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786>
 
-In your `etsyapp/` directory, add a `.env` file with contents similar to below except adjust for your API keystring.
+In your `etsyapp/` directory, add a `.env` file with contents similar to below except adjust for your own API **KEYSTRING** from Step 3 above.
 
 ```
 # API
